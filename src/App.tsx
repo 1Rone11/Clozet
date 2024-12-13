@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import { UploadForm } from "./components/Upload/UploadForm";
+import { WardrobeGrid } from "./components/Wardrobe/WardrobeGrid";
+import { OutfitCreator } from "./components/Outfit/OutfitCreator";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [activeTab, setActiveTab] = useState<"wardrobe" | "upload" | "outfit">(
+    "wardrobe"
+  );
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <header className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-6">
+            数字衣柜 / Digital Wardrobe
+          </h1>
+          <nav className="flex justify-center gap-4">
+            {[
+              { id: "wardrobe", label: "衣柜预览" },
+              { id: "upload", label: "上传物品" },
+              { id: "outfit", label: "搭配创建" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                className={`btn ${
+                  activeTab === tab.id ? "btn-primary" : "btn-secondary"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </header>
+
+        <main className="bg-white rounded-2xl shadow-xl p-6">
+          {activeTab === "wardrobe" && <WardrobeGrid />}
+          {activeTab === "upload" && <UploadForm />}
+          {activeTab === "outfit" && <OutfitCreator />}
+        </main>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
